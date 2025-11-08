@@ -1,0 +1,132 @@
+export function renderBooks(bookData, container) {
+  container.innerHTML = '';
+  bookData.forEach(book => {
+    const bookEl = document.createElement('div');
+    bookEl.className = 'book';
+    bookEl.innerHTML = `
+      <h3>${book.title}</h3>
+      <p>Author: ${book.author}</p>
+      <p>Price: ₹${book.price}</p>
+      <p>Status: ${book.availability}</p>
+      <button ${book.availability !== 'in stock' ? 'disabled' : ''} data-id="${book.id}">
+        Add to Cart
+      </button>
+    `;
+    containe<!DOCTYPE html>
+<html lang=import { getCart, removeFromCart, calculateTotal } from './cartManager.js';
+
+export function updateCartUI(container) {
+  const cartItems = getCart();
+  container.innerHTML = '';
+  cartItems.forEach(item => {
+    const itemEl = document.createElement('div');
+    itemEl.className = 'cart-item';
+    itemEl.innerHTML = `
+      <span>${item.title} - ₹${item.price}</span>
+      <button data-id="${item.id}">Remove</button>
+    `;
+    container.appendChild(itemEl);
+  });
+
+  const totalEl = document.createElement('p');
+  totalEl.textContent = `Total: ₹${calculateTotal()}`;
+  container.appendChild(totalEl);
+}"en">
+  <head>import { renderBooks } from './bookList.js';
+import { addToCart, removeFromCart } from './cartManager.js';
+import { updateCartUI } from './uiUpdater.js';
+import bookData from './books.json' assert { type: 'json' };
+
+const bookContainer = document.getElementById('book-list');
+const cartContainer = document.getElementById('cart');
+
+renderBooks(bookData, bookContainer);
+
+bookContainer.addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON') {
+    const bookId = Number(e.target.dataset.id);
+    const book = bookData.find(b => b.id === bookId);
+    if (book && book.availability === 'in stock') {
+      addToCart(book);
+      updateCartUI(cartContainer);
+    }
+  }
+});
+
+cartContainer.addEventListener('click', (e) => {
+  if (e.target.tagName === 'BUTTON') {
+    const bookId = Number(e.target.dataset.id);
+    removeFromCart(bookId);
+    updateCartUI(cartContainer);
+  }
+});
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Bookstore</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+      }
+      .book,
+      .cart-item {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+      button {
+        margin-top: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📚 Book Listings</h1>
+    <div id="book-list"></div>
+
+    <h2>🛒 Your Cart</h2>
+    <div id="cart"></div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
+r.appendChild(bookEl);
+  });
+}[
+  {let cart = [];
+
+export function addToCart(book) {
+  cart.push(book);
+}
+
+export function removeFromCart(bookId) {
+  cart = cart.filter(item => item.id !== bookId);
+}
+
+export function getCart() {
+  return cart;
+}
+
+export function calculateTotal() {
+  return cart.reduce((sum, item) => sum + item.price, 0);
+}
+    "id": 1,
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "price": 450,
+    "availability": "in stock"
+  },
+  {
+    "id": 2,
+    "title": "You Don't Know JS",
+    "author": "Kyle Simpson",
+    "price": 380,
+    "availability": "out of stock"
+  },
+  {
+    "id": 3,
+    "title": "JavaScript: The Good Parts",
+    "author": "Douglas Crockford",
+    "price": 320,
+    "availability": "in stock"
+  }
+]
